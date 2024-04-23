@@ -91,3 +91,18 @@ body{
     font-weight: 400;
     font-style: normal;
 }
+.loading {
+    animation-duration: 1.5s;
+    animation-name: fadeOut;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 100%;
+    }
+    to {
+        opacity: 0%;
+    }
+}
