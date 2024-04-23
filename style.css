@@ -67,6 +67,7 @@ body{
 }
 
 .day_grid > span:hover {
+    transition:  background-color 0.5s ease-in-out, border-radius .2s ease-in-out;
     color: black;
     cursor: pointer;
     border-radius: 50%;
