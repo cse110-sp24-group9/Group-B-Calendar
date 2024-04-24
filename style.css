@@ -68,10 +68,11 @@ body{
 }
 
 .day_grid > span:hover {
-    color: black;
+    color: wheat;
     cursor: pointer;
     border-radius: 50%;
-    background-color: #bfbfbf;
+    /* background-color: #454851; */
+    background-color: #1B998B;
 }
 /* todo add media query to fix gap in grid when overflow happens */
 
@@ -92,17 +93,15 @@ body{
     font-style: normal;
 }
 .loading {
-    animation-duration: 1.5s;
+    animation-duration: .5s;
     animation-name: fadeOut;
     animation-direction: alternate;
-    animation-iteration-count: infinite;
     animation-timing-function: ease-out;
 }
 .loadingIn {
     animation-name: fadeIn;
-    animation-duration: 1.5s;
+    animation-duration: .5s;
     animation-direction: alternate;
-    animation-iteration-count: infinite;
     animation-timing-function: ease-in;
 }
 

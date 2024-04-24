@@ -1,9 +1,11 @@
-const daysTag = document.querySelector(".days"),
-currentDate = document.querySelector(".current-date"),
-prevNextIcon = document.querySelectorAll(".icons span");
+/** @type {HTMLElement} */
+const daysGrid = document.querySelector(".day_grid"),
+currentDate = document.querySelector(".title_bar span"),
+prevNextIcon = document.querySelectorAll(".title_bar div button");
 
 // getting new date, current year and month
 let date = new Date(),
+currentDay = date.getDate(),
 currYear = date.getFullYear(),
 currMonth = date.getMonth();
 
@@ -12,28 +14,52 @@ const months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
               
 const renderCalendar = () => {
-    let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), // getting first day of month
-    lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), // getting last date of month
-    lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(), // getting last day of month
+    let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), // getting first day of month, in terms of week days
+    // zero indexed, ie 0 = sun, 1 = mon ... 6 = sat
+    lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), // getting last date of month, ie 31
+    lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(), // getting last day of month, ie what week day
     lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); // getting last date of previous month
-    let liTag = "";
+    let spanList = [];
 
     for (let i = firstDayofMonth; i > 0; i--) { // creating li of previous month last days
-        liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+        /** @type {HTMLSpanElement} */
+        let dayEle = document.createElement('span');
+        dayEle.className = "inactive";
+        dayEle.innerText = (lastDateofLastMonth - i + 1);
+        spanList.push(dayEle);
     }
-
+    let isCorrectMonth = currMonth === new Date().getMonth();
+    let isCorrectYear = currYear === new Date().getFullYear();
+    
     for (let i = 1; i <= lastDateofMonth; i++) { // creating li of all days of current month
         // adding active class to li if the current day, month, and year matched
-        let isToday = i === date.getDate() && currMonth === new Date().getMonth() 
-                     && currYear === new Date().getFullYear() ? "active" : "";
-        liTag += `<li class="${isToday}">${i}</li>`;
+        let isToday = i === currentDay && isCorrectMonth
+                     && isCorrectYear ? "active" : "";
+        let dayEle = document.createElement('span');
+        dayEle.className = isToday;
+        dayEle.innerText = (i);
+        spanList.push(dayEle);
     }
 
     for (let i = lastDayofMonth; i < 6; i++) { // creating li of next month first days
-        liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
+        let dayEle = document.createElement('span');
+        dayEle.className = "inactive";
+        dayEle.innerText = (i - lastDayofMonth + 1);
+        spanList.push(dayEle);
     }
     currentDate.innerText = `${months[currMonth]} ${currYear}`; // passing current mon and yr as currentDate text
-    daysTag.innerHTML = liTag;
+    if(daysGrid.classList.contains("loadingIn")){ //animation toggle
+        daysGrid.classList.remove("loadingIn");
+    }
+    daysGrid.classList.add("loading"); // start the loading animation 
+    daysGrid.onanimationend = () => {
+        if(daysGrid.classList.contains("loading")){
+            daysGrid.replaceChildren();
+            spanList.forEach((ele) => daysGrid.appendChild(ele));
+            daysGrid.classList.toggle("loading");
+            daysGrid.classList.add("loadingIn");
+        }
+    }
 }
 renderCalendar();
 
